@@ -81,7 +81,7 @@ tbody tr:hover{background:var(--soft)}
 </main>
 
 <script>
-const DATA_URL="data.json";
+const DATA_URL="2025.json";
 function encode(j){
   const D={types:[],inst:[],prog:[],quotas:[],cats:[],genders:[],rows:[]};
   const maps={types:new Map(),inst:new Map(),prog:new Map(),quotas:new Map(),cats:new Map(),genders:new Map()};
@@ -91,7 +91,7 @@ function encode(j){
       a.opening??null,a.closing??null,b.opening??null,b.closing??null])}
   return D}
 fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>start(encode(j)))
-.catch(e=>{console.error(e);document.getElementById("count").textContent="Could not load data.json. Serve this page from a web server with data.json in the same folder; browsers block local file fetches."});
+.catch(e=>{console.error(e);document.getElementById("count").textContent="Could not load 2025.json. Serve this page from a web server with 2025.json in the same folder; browsers block local file fetches."});
 function start(D){
 const TYPE={IIT:"IIT",NIT:"NIT","3IT":"IIIT",CFI:"GFTI"};
 const COLS=[["Institute and branch",0,"s"],["Quota",3,"s"],["Category",4,"s"],["Gender",5,"s"],["Opening",6,"n"],["Closing",7,"n"],["Opening",8,"n"],["Closing",9,"n"],["Closing shift",10,"n"]];
