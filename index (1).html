@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JoSAA 2025 opening and closing ranks</title>
+<style>
+:root{--bg:#f4f6f9;--surface:#fff;--text:#1b1f24;--muted:#58626f;--line:#d8dee6;--accent:#0f6cbd;--on-accent:#fff;--soft:#e7f0fa;--head:#eaf0f6;--pos:#a4262c;--neg:#107c10;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#13171c;--surface:#1b2027;--text:#e6eaef;--muted:#9aa5b1;--line:#2d3540;--accent:#4aa3ff;--on-accent:#06121f;--soft:#163049;--head:#222931;--pos:#ff8c8c;--neg:#6fcf6f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#13171c;--surface:#1b2027;--text:#e6eaef;--muted:#9aa5b1;--line:#2d3540;--accent:#4aa3ff;--on-accent:#06121f;--soft:#163049;--head:#222931;--pos:#ff8c8c;--neg:#6fcf6f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
+main{max-width:1280px;margin:0 auto;padding:28px 20px 40px}
+h1{font-size:1.7rem;font-weight:600;letter-spacing:-.01em;margin:0 0 6px}
+.sub{margin:0 0 22px;color:var(--muted);max-width:70ch}
+.filters{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px}
+label{display:flex;flex-direction:column;gap:4px;font-size:.8rem;color:var(--muted);font-weight:600}
+input,select{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:7px 9px;min-width:0;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible,th button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 8px}
+#count{color:var(--muted);font-size:.9rem}
+.pager{display:flex;align-items:center;gap:8px;font-size:.9rem}
+.pager button,#reset{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:4px;padding:5px 12px;cursor:pointer}
+.pager button:hover:not(:disabled),#reset:hover{background:var(--soft);border-color:var(--accent)}
+.pager button:disabled{opacity:.4;cursor:default}
+.wrap{background:var(--surface);border:1px solid var(--line);border-radius:8px;overflow:auto;max-height:72vh}
+table{border-collapse:collapse;width:100%;min-width:1040px;font-size:.88rem}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{position:sticky;top:0;background:var(--head);z-index:1;padding:0;border-bottom:2px solid var(--accent)}
+thead tr.grp th{position:static;padding:6px 10px;font-size:.78rem;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);text-align:center}
+thead tr.grp th:first-child{text-align:left}
+th button{all:unset;box-sizing:border-box;display:block;width:100%;padding:9px 10px;cursor:pointer;font-weight:600;font-size:.85rem}
+th.n button{text-align:right}
+th button[aria-sort] ,th[aria-sort] button{color:var(--accent)}
+th[aria-sort="ascending"] button::after{content:" ▲";font-size:.65rem}
+th[aria-sort="descending"] button::after{content:" ▼";font-size:.65rem}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:hover{background:var(--soft)}
+.inst{font-weight:600}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:1px 6px;border-radius:3px;background:var(--soft);color:var(--accent);margin-right:6px}
+.prog{color:var(--muted)}
+.pos{color:var(--pos)}.neg{color:var(--neg)}.na{color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+.note{margin:14px 0 0;color:var(--muted);font-size:.85rem;max-width:90ch}
+@media (max-width:900px){.filters{grid-template-columns:1fr 1fr}.filters label:first-child{grid-column:1/-1}h1{font-size:1.4rem}}
+@media (max-width:480px){main{padding:20px 12px 32px}.filters{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<h1>JoSAA 2025 opening and closing ranks</h1>
+<p class="sub">Round 1 and Round 6 side by side for every IIT, NIT, IIIT and other GFTI seat. Search by college or branch, filter by quota and category, and sort any column.</p>
+
+<div class="filters" role="search">
+<label>Search college or branch<input id="q" type="search" placeholder="e.g. Kota, Computer Science" autocomplete="off"></label>
+<label>Institute type<select id="type"></select></label>
+<label>Quota<select id="quota"></select></label>
+<label>Category<select id="cat"></select></label>
+<label>Gender<select id="gen"></select></label>
+</div>
+
+<div class="bar">
+<span id="count" aria-live="polite">Loading data…</span>
+<span class="pager"><button id="reset" type="button">Clear filters</button><button id="prev" type="button">Previous</button><span id="pg"></span><button id="next" type="button">Next</button></span>
+</div>
+
+<div class="wrap">
+<table>
+<thead>
+<tr class="grp"><th colspan="4">Seat</th><th colspan="2">Round 1</th><th colspan="2">Round 6</th><th></th></tr>
+<tr id="hr"></tr>
+</thead>
+<tbody id="tb"></tbody>
+</table>
+<div id="empty" class="empty" hidden>No seats match these filters. Clear a filter or shorten the search.</div>
+</div>
+
+<p class="note">Lower rank is better. “Closing shift” is the Round 6 closing rank minus the Round 1 closing rank: a positive number means the seat closed at a higher rank (easier to get) by Round 6. Seats with a dash had no Round 6 allotment. Ranks are JEE Main CRL for NITs, IIITs and GFTIs and JEE Advanced for IITs.</p>
+</main>
+
+<script>
+const DATA_URL="data.json";
+function encode(j){
+  const D={types:[],inst:[],prog:[],quotas:[],cats:[],genders:[],rows:[]};
+  const maps={types:new Map(),inst:new Map(),prog:new Map(),quotas:new Map(),cats:new Map(),genders:new Map()};
+  const ix=(k,v)=>{const m=maps[k];let i=m.get(v);if(i===undefined){i=D[k].length;D[k].push(v);m.set(v,i)}return i};
+  for(const s of j.seats){const a=s.round1||{},b=s.round6||{};
+    D.rows.push([ix("inst",s.institute),ix("prog",s.program),ix("types",s.type),ix("quotas",s.quota),ix("cats",s.category),ix("genders",s.gender),
+      a.opening??null,a.closing??null,b.opening??null,b.closing??null])}
+  return D}
+fetch(DATA_URL).then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(j=>start(encode(j)))
+.catch(e=>{console.error(e);document.getElementById("count").textContent="Could not load data.json. Serve this page from a web server with data.json in the same folder; browsers block local file fetches."});
+function start(D){
+const TYPE={IIT:"IIT",NIT:"NIT","3IT":"IIIT",CFI:"GFTI"};
+const COLS=[["Institute and branch",0,"s"],["Quota",3,"s"],["Category",4,"s"],["Gender",5,"s"],["Opening",6,"n"],["Closing",7,"n"],["Opening",8,"n"],["Closing",9,"n"],["Closing shift",10,"n"]];
+const R=D.rows;
+for(const r of R){r.push(r[7]!=null&&r[9]!=null?r[9]-r[7]:null)}
+const $=id=>document.getElementById(id);
+const nf=new Intl.NumberFormat("en-IN");
+const S={q:"",type:"",quota:"",cat:"",gen:"",key:null,dir:1,page:0};
+const PAGE=100;
+const lower=D.inst.map(s=>s.toLowerCase()),plower=D.prog.map(s=>s.toLowerCase());
+
+function fill(id,label,vals,fmt){const s=$(id);s.innerHTML="";s.add(new Option("All "+label,""));vals.forEach((v,i)=>s.add(new Option(fmt?fmt(v):v,i)))}
+fill("type","types",D.types,v=>TYPE[v]||v);fill("quota","quotas",D.quotas);fill("cat","categories",D.cats);fill("gen","genders",D.genders);
+
+const hr=$("hr");
+COLS.forEach((c,i)=>{const th=document.createElement("th");if(c[2]==="n")th.className="n";const b=document.createElement("button");b.type="button";b.textContent=c[0];b.onclick=()=>{S.dir=S.key===i?-S.dir:1;S.key=i;S.page=0;draw()};th.appendChild(b);hr.appendChild(th)});
+// header cells: institute+program share the first column, so group row spans match
+function sortVal(r,i){const k=COLS[i][1];return k===0?D.inst[r[0]]:k===3?D.quotas[r[3]]:k===4?D.cats[r[4]]:k===5?D.genders[r[5]]:r[k]}
+function fmtN(v){return v==null?'<span class="na">–</span>':nf.format(v)}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+
+function filtered(){
+  const terms=S.q.toLowerCase().split(/\s+/).filter(Boolean);
+  let out=R.filter(r=>{
+    if(S.type!==""&&r[2]!=S.type)return false;
+    if(S.quota!==""&&r[3]!=S.quota)return false;
+    if(S.cat!==""&&r[4]!=S.cat)return false;
+    if(S.gen!==""&&r[5]!=S.gen)return false;
+    for(const t of terms){if(lower[r[0]].indexOf(t)<0&&plower[r[1]].indexOf(t)<0)return false}
+    return true});
+  if(S.key!=null){const i=S.key,d=S.dir;out=out.slice().sort((a,b)=>{const x=sortVal(a,i),y=sortVal(b,i);if(x==null&&y==null)return 0;if(x==null)return 1;if(y==null)return -1;return(x<y?-1:x>y?1:0)*d})}
+  return out}
+
+function draw(){
+  const rows=filtered(),pages=Math.max(1,Math.ceil(rows.length/PAGE));
+  if(S.page>=pages)S.page=pages-1;
+  const a=S.page*PAGE,slice=rows.slice(a,a+PAGE);
+  $("tb").innerHTML=slice.map(r=>{
+    const sh=r[10],cls=sh==null?"":sh>0?"pos":sh<0?"neg":"";
+    const shTxt=sh==null?'<span class="na">–</span>':(sh>0?"+":sh<0?"−":"")+nf.format(Math.abs(sh));
+    return "<tr><td><div class=\"inst\"><span class=\"tag\">"+(TYPE[D.types[r[2]]]||"")+"</span>"+esc(D.inst[r[0]])+"</div><div class=\"prog\">"+esc(D.prog[r[1]])+"</div></td>"+
+    "<td>"+D.quotas[r[3]]+"</td><td>"+D.cats[r[4]]+"</td><td>"+D.genders[r[5]]+"</td>"+
+    "<td class=\"n\">"+fmtN(r[6])+"</td><td class=\"n\">"+fmtN(r[7])+"</td><td class=\"n\">"+fmtN(r[8])+"</td><td class=\"n\">"+fmtN(r[9])+"</td>"+
+    "<td class=\"n "+cls+"\">"+shTxt+"</td></tr>"}).join("");
+  $("empty").hidden=rows.length>0;
+  $("count").textContent=rows.length?"Showing "+nf.format(a+1)+"–"+nf.format(a+slice.length)+" of "+nf.format(rows.length)+" seats":"0 seats";
+  $("pg").textContent="Page "+(S.page+1)+" of "+pages;
+  $("prev").disabled=S.page===0;$("next").disabled=S.page>=pages-1;
+  [...hr.children].forEach((th,i)=>{if(S.key===i)th.setAttribute("aria-sort",S.dir>0?"ascending":"descending");else th.removeAttribute("aria-sort")});
+  $("tb").parentNode.parentNode.scrollTop=0}
+
+let tm;$("q").oninput=e=>{clearTimeout(tm);tm=setTimeout(()=>{S.q=e.target.value;S.page=0;draw()},120)};
+for(const [id,k] of [["type","type"],["quota","quota"],["cat","cat"],["gen","gen"]])$(id).onchange=e=>{S[k]=e.target.value;S.page=0;draw()};
+$("prev").onclick=()=>{S.page--;draw()};$("next").onclick=()=>{S.page++;draw()};
+$("reset").onclick=()=>{Object.assign(S,{q:"",type:"",quota:"",cat:"",gen:"",key:null,dir:1,page:0});$("q").value="";["type","quota","cat","gen"].forEach(i=>$(i).value="");draw()};
+draw();
+}
+</script>
+</body>
+</html>
