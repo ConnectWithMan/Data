@@ -360,14 +360,14 @@ td.nowrap { white-space: nowrap; }
 
   var countEl = document.getElementById('count');
   countEl.textContent = 'Loading data…';
-  fetch('data.json')
+  fetch('2024.json')
     .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(init)
     .catch(function () {
       countEl.textContent = '';
       var e = document.getElementById('empty');
       e.hidden = false;
-      e.textContent = 'Could not load data.json. Keep it in the same folder as this page and open the page from a web server, not as a local file.';
+      e.textContent = 'Could not load 2024.json. Keep it in the same folder as this page and open the page from a web server, not as a local file.';
     });
 })();
 </script>
