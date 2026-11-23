@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JoSAA 2026 opening and closing ranks</title>
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light dark;
+  --bg: #f3f6fa;
+  --surface: #ffffff;
+  --surface-2: #f7f9fc;
+  --text: #1a2330;
+  --muted: #56637a;
+  --line: #dbe2ec;
+  --accent: #0f6cbd;
+  --accent-ink: #ffffff;
+  --accent-soft: #e5f0fb;
+  --pos: #0a6b3a;
+  --neg: #b3261e;
+  --focus: #0f6cbd;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11161d;
+    --surface: #1a212b;
+    --surface-2: #202833;
+    --text: #e8edf4;
+    --muted: #9aa8bd;
+    --line: #2d3746;
+    --accent: #5aa9ec;
+    --accent-ink: #0b1522;
+    --accent-soft: #1c2e44;
+    --pos: #5fd193;
+    --neg: #ff8f86;
+    --focus: #5aa9ec;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #11161d;
+  --surface: #1a212b;
+  --surface-2: #202833;
+  --text: #e8edf4;
+  --muted: #9aa8bd;
+  --line: #2d3746;
+  --accent: #5aa9ec;
+  --accent-ink: #0b1522;
+  --accent-soft: #1c2e44;
+  --pos: #5fd193;
+  --neg: #ff8f86;
+  --focus: #5aa9ec;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding: 28px 16px 40px; }
+h1 { font-size: clamp(1.5rem, 1.1rem + 1.8vw, 2.1rem); line-height: 1.2; margin: 0 0 8px; font-weight: 650; letter-spacing: -0.01em; }
+.lede { margin: 0 0 20px; color: var(--muted); max-width: 68ch; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; }
+.filters { padding: 16px; display: grid; gap: 14px; margin-bottom: 14px; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field label { font-size: 13px; color: var(--muted); font-weight: 600; }
+input[type="search"], select {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-bottom-color: var(--muted);
+  border-radius: 4px;
+  padding: 8px 10px;
+  min-height: 38px;
+}
+.row-selects { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; align-items: end; }
+button { font: inherit; cursor: pointer; }
+.btn {
+  min-height: 38px; padding: 7px 16px; border-radius: 4px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600;
+}
+.btn:hover:not(:disabled) { background: var(--accent-soft); border-color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: default; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.meta { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: space-between; align-items: center; margin: 0 2px 10px; color: var(--muted); font-size: 14px; }
+.scroller { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 1020px; }
+th, td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+thead th { background: var(--surface-2); font-weight: 600; font-size: 13px; white-space: nowrap; }
+thead tr.groups th { text-align: center; color: var(--muted); border-bottom: 1px solid var(--line); padding-top: 10px; padding-bottom: 6px; }
+thead tr.groups th.seat { text-align: left; }
+thead tr.groups th.sep, td.sep, thead tr.cols th.sep { border-left: 1px solid var(--line); }
+.sort {
+  all: unset; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; padding: 2px 0; font-weight: 600;
+}
+.sort:hover { color: var(--accent); }
+.sort:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 2px; }
+.sort .arrow { font-size: 11px; color: var(--accent); min-width: 1ch; }
+th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+th.num .sort { justify-content: flex-end; }
+tbody tr:hover { background: var(--accent-soft); }
+tbody tr:last-child td { border-bottom: 0; }
+.name { display: block; font-weight: 600; }
+.sub { display: block; color: var(--muted); font-size: 13px; }
+td.inst { min-width: 230px; }
+td.prog { min-width: 230px; }
+td.nowrap { white-space: nowrap; }
+.pos { color: var(--pos); font-weight: 600; }
+.neg { color: var(--neg); font-weight: 600; }
+.dash { color: var(--muted); }
+.prep { font-size: 11px; font-weight: 600; color: var(--accent); margin-left: 2px; cursor: help; }
+.empty { padding: 36px 16px; text-align: center; color: var(--muted); }
+.pager { display: flex; gap: 12px; align-items: center; justify-content: center; margin: 16px 0 4px; }
+.pager span { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 9ch; text-align: center; }
+.note { margin: 20px 2px 0; color: var(--muted); font-size: 14px; max-width: 90ch; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>JoSAA 2026 opening and closing ranks</h1>
+  <p class="lede">Round 1 and Round 5 side by side for every IIT, NIT, IIIT and other GFTI seat. Search by college or branch, filter by quota and category, and sort any column.</p>
+
+  <section class="card filters" aria-label="Filters">
+    <div class="field">
+      <label for="q">Search college or branch</label>
+      <input id="q" type="search" placeholder="For example: NIT Trichy computer science" autocomplete="off">
+    </div>
+    <div class="row-selects">
+      <div class="field"><label for="f-type">Institute type</label><select id="f-type"></select></div>
+      <div class="field"><label for="f-quota">Quota</label><select id="f-quota"></select></div>
+      <div class="field"><label for="f-cat">Category</label><select id="f-cat"></select></div>
+      <div class="field"><label for="f-gen">Gender</label><select id="f-gen"></select></div>
+      <div class="field"><button class="btn" id="clear" type="button">Clear filters</button></div>
+    </div>
+  </section>
+
+  <div class="meta" aria-live="polite"><span id="count"></span></div>
+
+  <div class="card scroller" id="tablewrap">
+    <table>
+      <thead>
+        <tr class="groups">
+          <th class="seat" colspan="5" scope="colgroup">Seat</th>
+          <th class="sep" colspan="2" scope="colgroup">Round 1</th>
+          <th class="sep" colspan="2" scope="colgroup">Round 5</th>
+          <th class="sep" scope="col"></th>
+        </tr>
+        <tr class="cols" id="cols"></tr>
+      </thead>
+      <tbody id="body"></tbody>
+    </table>
+    <div class="empty" id="empty" hidden></div>
+  </div>
+
+  <div class="pager">
+    <button class="btn" id="prev" type="button" disabled>Previous</button>
+    <span id="pageinfo"></span>
+    <button class="btn" id="next" type="button" disabled>Next</button>
+  </div>
+
+  <p class="note">Lower rank is better. “Closing shift” is the Round 5 closing rank minus the Round 1 closing rank: a positive number means the seat closed at a higher rank (easier to get) by Round 5. Seats with a dash have no Round 5 entry. A “P” after a rank marks a preparatory-course rank, so the closing shift is left blank when only one of the two closing ranks carries a P. Ranks are JEE Advanced ranks for IITs (and IISc Bangalore, whose ranks are on the same scale) and JEE Main ranks for NITs, IIITs and other GFTIs; for reserved categories they are category ranks.</p>
+</div>
+
+<script>
+(function () {
+  function init(D) {
+  var INST = D.inst, PROG = D.prog, QUOTA = D.quota, CAT = D.cat, GEN = D.gen, ROWS = D.rows;
+  var PAGE = 50;
+  var TYPE_LABEL = { IIT: 'IIT', NIT: 'NIT', '3IT': 'IIIT', CFI: 'Other GFTI' };
+  var QUOTA_LABEL = { AI: 'All India', HS: 'Home State', OS: 'Other State', GO: 'Goa', JK: 'Jammu and Kashmir', LA: 'Ladakh' };
+  var fmt = new Intl.NumberFormat('en-IN');
+
+  var instL = INST.map(function (x) { return x[0].toLowerCase(); });
+  var progL = PROG.map(function (x) { return (x[0] + ' ' + x[1]).toLowerCase(); });
+
+  var COLS = [
+    { k: 'inst', label: 'Institute' },
+    { k: 'prog', label: 'Program' },
+    { k: 'quota', label: 'Quota' },
+    { k: 'cat', label: 'Category' },
+    { k: 'gen', label: 'Gender' },
+    { k: 'o1', label: 'Opening', num: 1, sep: 1 },
+    { k: 'c1', label: 'Closing', num: 1 },
+    { k: 'o5', label: 'Opening', num: 1, sep: 1 },
+    { k: 'c5', label: 'Closing', num: 1 },
+    { k: 'shift', label: 'Closing shift', num: 1, sep: 1 }
+  ];
+  var KEY = {
+    inst: function (r) { return INST[r[0]][0]; },
+    prog: function (r) { return PROG[r[1]][0] + ' ' + PROG[r[1]][1]; },
+    quota: function (r) { return QUOTA[r[2]]; },
+    cat: function (r) { return CAT[r[3]]; },
+    gen: function (r) { return GEN[r[4]]; },
+    o1: function (r) { return r[5]; },
+    c1: function (r) { return r[6]; },
+    o5: function (r) { return r[7] < 0 ? null : r[7]; },
+    c5: function (r) { return r[8] < 0 ? null : r[8]; },
+    shift: function (r) { return shiftOf(r); }
+  };
+
+  var S = { q: '', type: '', quota: '', cat: '', gen: '', key: null, dir: 1, page: 0 };
+  var view = [];
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  }
+  function genLabel(g) { return g === 'Gender-Neutral' ? 'Gender-neutral' : g; }
+
+  function fillSelect(id, allLabel, opts) {
+    var el = document.getElementById(id);
+    el.innerHTML = '<option value="">' + allLabel + '</option>' +
+      opts.map(function (o) { return '<option value="' + esc(o[0]) + '">' + esc(o[1]) + '</option>'; }).join('');
+  }
+
+  var typesPresent = [];
+  INST.forEach(function (x) { if (typesPresent.indexOf(x[1]) < 0) typesPresent.push(x[1]); });
+  fillSelect('f-type', 'All types', typesPresent.map(function (t) { return [t, TYPE_LABEL[t] || t]; }));
+  fillSelect('f-quota', 'All quotas', QUOTA.map(function (q) { return [q, QUOTA_LABEL[q] ? QUOTA_LABEL[q] + ' (' + q + ')' : q]; }));
+  fillSelect('f-cat', 'All categories', CAT.map(function (c) { return [c, c]; }));
+  fillSelect('f-gen', 'All genders', GEN.map(function (g) { return [g, genLabel(g)]; }));
+
+  var colsEl = document.getElementById('cols');
+  function renderHead() {
+    colsEl.innerHTML = COLS.map(function (c) {
+      var active = S.key === c.k;
+      var arrow = active ? (S.dir > 0 ? '▲' : '▼') : '';
+      var aria = active ? (S.dir > 0 ? 'ascending' : 'descending') : 'none';
+      return '<th scope="col" class="' + (c.num ? 'num ' : '') + (c.sep ? 'sep' : '') + '" aria-sort="' + aria + '">' +
+        '<button type="button" class="sort" data-k="' + c.k + '">' + esc(c.label) + '<span class="arrow" aria-hidden="true">' + arrow + '</span></button></th>';
+    }).join('');
+  }
+  colsEl.addEventListener('click', function (e) {
+    var b = e.target.closest('.sort');
+    if (!b) return;
+    var k = b.getAttribute('data-k');
+    if (S.key !== k) { S.key = k; S.dir = 1; }
+    else if (S.dir === 1) { S.dir = -1; }
+    else { S.key = null; S.dir = 1; }
+    S.page = 0;
+    renderHead();
+    update();
+  });
+
+  function applyFilters() {
+    var tokens = S.q.toLowerCase().split(/\s+/).filter(Boolean);
+    var out = [];
+    for (var n = 0; n < ROWS.length; n++) {
+      var r = ROWS[n];
+      if (S.type && INST[r[0]][1] !== S.type) continue;
+      if (S.quota && QUOTA[r[2]] !== S.quota) continue;
+      if (S.cat && CAT[r[3]] !== S.cat) continue;
+      if (S.gen && GEN[r[4]] !== S.gen) continue;
+      if (tokens.length) {
+        var hay = instL[r[0]] + ' ' + progL[r[1]];
+        var ok = true;
+        for (var t = 0; t < tokens.length; t++) { if (hay.indexOf(tokens[t]) < 0) { ok = false; break; } }
+        if (!ok) continue;
+      }
+      out.push(n);
+    }
+    if (S.key) {
+      var f = KEY[S.key], d = S.dir;
+      out.sort(function (a, b) {
+        var x = f(ROWS[a]), y = f(ROWS[b]);
+        if (x === null && y === null) return a - b;
+        if (x === null) return 1;
+        if (y === null) return -1;
+        var c = typeof x === 'string' ? x.localeCompare(y) : x - y;
+        return c ? c * d : a - b;
+      });
+    }
+    return out;
+  }
+
+  function shiftHtml(v) {
+    if (v === null) return '<span class="dash">—</span>';
+    if (v > 0) return '<span class="pos">+' + fmt.format(v) + '</span>';
+    if (v < 0) return '<span class="neg">−' + fmt.format(-v) + '</span>';
+    return '0';
+  }
+  function rankHtml(v, p) { return v < 0 ? '<span class="dash">—</span>' : fmt.format(v) + (p ? '<span class="prep" title="Preparatory-course rank">P</span>' : ''); }
+  function shiftOf(r) {
+    if (r[8] < 0 || r[6] < 0) return null;
+    if (((r[9] >> 1) & 1) !== ((r[9] >> 3) & 1)) return null;
+    return r[8] - r[6];
+  }
+
+  function render() {
+    var total = view.length;
+    var pages = Math.max(1, Math.ceil(total / PAGE));
+    if (S.page >= pages) S.page = pages - 1;
+    var start = S.page * PAGE, end = Math.min(total, start + PAGE);
+    var html = '';
+    for (var i = start; i < end; i++) {
+      var r = ROWS[view[i]];
+      var inst = INST[r[0]], prog = PROG[r[1]], q = QUOTA[r[2]];
+      var sh = shiftOf(r);
+      html += '<tr>' +
+        '<td class="inst"><span class="name">' + esc(inst[0]) + '</span><span class="sub">' + esc(TYPE_LABEL[inst[1]] || inst[1]) + '</span></td>' +
+        '<td class="prog"><span class="name">' + esc(prog[0]) + '</span>' + (prog[1] ? '<span class="sub">' + esc(prog[1]) + '</span>' : '') + '</td>' +
+        '<td class="nowrap" title="' + esc(QUOTA_LABEL[q] || q) + '">' + esc(q) + '</td>' +
+        '<td class="nowrap">' + esc(CAT[r[3]]) + '</td>' +
+        '<td class="nowrap">' + esc(genLabel(GEN[r[4]])) + '</td>' +
+        '<td class="num sep">' + rankHtml(r[5], r[9] & 1) + '</td>' +
+        '<td class="num">' + rankHtml(r[6], r[9] & 2) + '</td>' +
+        '<td class="num sep">' + rankHtml(r[7], r[9] & 4) + '</td>' +
+        '<td class="num">' + rankHtml(r[8], r[9] & 8) + '</td>' +
+        '<td class="num sep">' + shiftHtml(sh) + '</td></tr>';
+    }
+    document.getElementById('body').innerHTML = html;
+    var empty = document.getElementById('empty');
+    if (total === 0) {
+      empty.hidden = false;
+      empty.textContent = 'No seats match these filters. Clear a filter or shorten the search to see more.';
+      document.getElementById('count').textContent = '0 of ' + fmt.format(ROWS.length) + ' seats';
+    } else {
+      empty.hidden = true;
+      document.getElementById('count').textContent = 'Showing ' + fmt.format(start + 1) + '–' + fmt.format(end) + ' of ' + fmt.format(total) + ' seats';
+    }
+    document.getElementById('pageinfo').textContent = 'Page ' + (S.page + 1) + ' of ' + pages;
+    document.getElementById('prev').disabled = S.page === 0;
+    document.getElementById('next').disabled = S.page >= pages - 1;
+  }
+
+  function update() { view = applyFilters(); render(); }
+
+  var timer;
+  document.getElementById('q').addEventListener('input', function (e) {
+    clearTimeout(timer);
+    var v = e.target.value;
+    timer = setTimeout(function () { S.q = v; S.page = 0; update(); }, 150);
+  });
+  [['f-type', 'type'], ['f-quota', 'quota'], ['f-cat', 'cat'], ['f-gen', 'gen']].forEach(function (p) {
+    document.getElementById(p[0]).addEventListener('change', function (e) { S[p[1]] = e.target.value; S.page = 0; update(); });
+  });
+  document.getElementById('clear').addEventListener('click', function () {
+    S.q = S.type = S.quota = S.cat = S.gen = '';
+    S.page = 0;
+    document.getElementById('q').value = '';
+    ['f-type', 'f-quota', 'f-cat', 'f-gen'].forEach(function (id) { document.getElementById(id).value = ''; });
+    update();
+  });
+  function go(delta) {
+    S.page += delta;
+    render();
+    document.getElementById('tablewrap').scrollIntoView({ block: 'start' });
+  }
+  document.getElementById('prev').addEventListener('click', function () { go(-1); });
+  document.getElementById('next').addEventListener('click', function () { go(1); });
+
+  renderHead();
+  update();
+  document.getElementById('prev').disabled = view.length <= PAGE ? true : S.page === 0;
+  }
+
+  var countEl = document.getElementById('count');
+  countEl.textContent = 'Loading data…';
+  fetch('2026.json')
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(init)
+    .catch(function () {
+      countEl.textContent = '';
+      var e = document.getElementById('empty');
+      e.hidden = false;
+      e.textContent = 'Could not load 2026.json. Keep it in the same folder as this page and open the page from a web server, not as a local file.';
+    });
+})();
+</script>
+</body>
+</html>
