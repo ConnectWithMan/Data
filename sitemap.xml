@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://database.famral.com</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://database.famral.com/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://database.famral.com/josaa/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://database.famral.com/josaa/cutoff/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://database.famral.com/csab/</loc><lastmod>2026-11-25</lastmod></url>
   <url><loc>https://database.famral.com/csab/cutoff/</loc><lastmod>2026-11-25</lastmod></url>
-  <url><loc>https://database.famral.com/josaa/cutoff/2026</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://database.famral.com/josaa/cutoff/2025</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://database.famral.com/josaa/cutoff/2024</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://database.famral.com/josaa/cutoff/2023</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://database.famral.com/csab/cutoff/2026</loc><lastmod>2026-11-23</lastmod></url>
-  <url><loc>https://database.famral.com/csab/cutoff/2025</loc><lastmod>2026-11-23</lastmod></url>
+  <url><loc>https://database.famral.com/josaa/cutoff/2026</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/josaa/cutoff/2025</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/josaa/cutoff/2024</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/josaa/cutoff/2023</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/csab/cutoff/2026</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/csab/cutoff/2025</loc><lastmod>2026-11-25</lastmod></url>
+  <url><loc>https://database.famral.com/csab/cutoff/2024</loc><lastmod>2026-11-25</lastmod></url>
 </urlset>
