@@ -57,6 +57,16 @@
           roundLabels: ['Round 1', 'Round 6'],
           lastUpdated: '2026-11-23',
           rows: 10842
+        },
+        2022: {
+          year: 2022,
+          url: '/josaa/cutoff/2022',
+          jsonUrl: '/josaa/cutoff/2022.json',
+          rounds: [1, 6],
+          roundLabels: ['Round 1', 'Round 6'],
+          lastUpdated: '2026-11-26',
+          rows: 10023,
+          hasPrepFlag: true
         }
       }
     },

@@ -226,8 +226,7 @@
       { k: 'cA', label: 'Closing', num: 1 },
       { k: 'oB', label: 'Opening', num: 1, sep: 1 },
       { k: 'cB', label: 'Closing', num: 1 },
-      { k: 'shift', label: 'Closing shift', num: 1, sep: 1 },
-      { k: 'hist', label: 'Years', nosort: 1, sep: 1 }
+      { k: 'shift', label: 'Closing shift', num: 1, sep: 1 }
     ];
 
     var KEY = {
@@ -365,7 +364,6 @@
           '<td class="num sep" data-label="' + rBLabel + ' Opening">' + rankHtml(b.o, b.oPrep) + '</td>' +
           '<td class="num" data-label="' + rBLabel + ' Closing">' + rankHtml(b.c, b.cPrep) + '</td>' +
           '<td class="num sep" data-label="Closing Shift">' + shiftHtml(sh) + '</td>' +
-          '<td class="nowrap sep" data-label="Compare"><button type="button" class="btn sm ghost hist-btn" data-row="' + rowIdx + '">History</button></td>' +
           '</tr>';
       }
       document.getElementById('body').innerHTML = html;
@@ -388,72 +386,6 @@
       view = applyFilters();
       render();
     }
-
-    // Historical comparison dialog
-    var dlg = document.getElementById('cmp-dialog');
-    var cmpTitle = document.getElementById('cmp-title');
-    var cmpSub = document.getElementById('cmp-sub');
-    var cmpBody = document.getElementById('cmp-body');
-    var cmpClose = document.getElementById('cmp-close');
-    if (cmpClose && dlg) {
-      cmpClose.addEventListener('click', function () { dlg.close(); });
-      dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-    }
-
-    document.getElementById('body').addEventListener('click', function (e) {
-      var btn = e.target.closest('.hist-btn');
-      if (!btn || !dlg) return;
-      var r = ROWS[Number(btn.getAttribute('data-row'))];
-      var instName = INST[r[0]][0];
-      var progName = PROG[r[1]][0];
-      var qCode = QUOTA[r[2]];
-      var catName = CAT[r[3]];
-      var genName = GEN[r[4]];
-
-      cmpTitle.textContent = instName;
-      cmpSub.textContent = progName + ' · ' + qCode + ' · ' + catName + ' · ' + genLabel(genName);
-      cmpBody.innerHTML = '<p>Loading historical cutoffs…</p>';
-      dlg.showModal();
-
-      var years = Object.keys(cCfg.datasets).map(Number).sort(function (a, b) { return b - a; });
-      Promise.all(years.map(function (y) {
-        return fetchDataset(y).then(function (ds) { return { year: y, ds: ds }; });
-      })).then(function (results) {
-        var rowsHtml = results.map(function (res) {
-          var ds = res.ds;
-          var match = null;
-          for (var i = 0; i < ds.rows.length; i++) {
-            var rr = ds.rows[i];
-            if (ds.inst[rr[0]][0] === instName &&
-                ds.prog[rr[1]][0] === progName &&
-                ds.quota[rr[2]] === qCode &&
-                ds.cat[rr[3]] === catName &&
-                ds.gen[rr[4]] === genName) {
-              match = rr;
-              break;
-            }
-          }
-          var meta = cCfg.datasets[res.year];
-          if (!match) {
-            return '<tr><td><a href="' + meta.url + '">' + res.year + '</a></td><td colspan="4" class="dash">Not listed in ' + res.year + '</td></tr>';
-          }
-          var lastIdx = ds.rounds.length - 1;
-          var o1 = match[5], c1 = match[6];
-          var oF = match[5 + lastIdx * 2], cF = match[6 + lastIdx * 2];
-          return '<tr>' +
-            '<td><strong><a href="' + meta.url + '">' + res.year + '</a></strong> <span class="sub">R1 &amp; R' + ds.rounds[lastIdx] + '</span></td>' +
-            '<td class="num">' + (o1 < 0 ? '—' : fmt.format(o1)) + '</td>' +
-            '<td class="num">' + (c1 < 0 ? '—' : fmt.format(c1)) + '</td>' +
-            '<td class="num">' + (oF < 0 ? '—' : fmt.format(oF)) + '</td>' +
-            '<td class="num">' + (cF < 0 ? '—' : fmt.format(cF)) + '</td>' +
-            '</tr>';
-        }).join('');
-
-        cmpBody.innerHTML = '<table><thead><tr><th>Year</th><th class="num">R1 Opening</th><th class="num">R1 Closing</th><th class="num">Final Opening</th><th class="num">Final Closing</th></tr></thead><tbody>' + rowsHtml + '</tbody></table>';
-      }).catch(function () {
-        cmpBody.innerHTML = '<p>Could not load historical datasets for comparison.</p>';
-      });
-    });
 
     // Download dropdown & Share button
     var dlToggle = document.getElementById('dl-toggle');

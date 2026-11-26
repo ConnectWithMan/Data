@@ -42,6 +42,7 @@ DATASETS = [
     ("josaa", 2025, "josaa/cutoff/2025.json", "josaa/cutoff/2025.html", [1, 6], False),
     ("josaa", 2024, "josaa/cutoff/2024.json", "josaa/cutoff/2024.html", [1, 5], False),
     ("josaa", 2023, "josaa/cutoff/2023.json", "josaa/cutoff/2023.html", [1, 6], False),
+    ("josaa", 2022, "josaa/cutoff/2022.json", "josaa/cutoff/2022.html", [1, 6], True),
     ("csab", 2026, "csab/cutoff/2026.json", "csab/cutoff/2026.html", [1, 2], False),
     ("csab", 2025, "csab/cutoff/2025.json", "csab/cutoff/2025.html", [1, 2, 3], False),
     ("csab", 2024, "csab/cutoff/2024.json", "csab/cutoff/2024.html", [1, 2], False),
@@ -179,7 +180,6 @@ def render_preview_rows(ds: dict, limit: int = 25) -> str:
             f'<td class="num sep" data-label="{rf_lbl} Opening">{fmt_num(o_last)}</td>'
             f'<td class="num" data-label="{rf_lbl} Closing">{fmt_num(c_last)}</td>'
             f'<td class="num sep" data-label="Closing Shift">{shift_html}</td>'
-            f'<td class="nowrap sep" data-label="Compare"><span class="dash">—</span></td>'
             f'</tr>'
         )
     return "\n        ".join(out)
@@ -326,7 +326,7 @@ def build_cutoff_page(counselling: str, year: int, ds: dict, html_path: str, jso
           <th class="seat" colspan="5" scope="colgroup">Seat</th>
           <th class="sep" colspan="2" scope="colgroup" id="grp-ra">Round {rounds[0]}</th>
           <th class="sep" colspan="2" scope="colgroup" id="grp-rb">Round {rounds[-1]}</th>
-          <th class="sep" colspan="2" scope="colgroup">Compare</th>
+          <th class="sep" scope="col"></th>
         </tr>
         <tr class="cols" id="cols">
           <th scope="col">Institute</th>
@@ -339,7 +339,6 @@ def build_cutoff_page(counselling: str, year: int, ds: dict, html_path: str, jso
           <th scope="col" class="num sep">Opening</th>
           <th scope="col" class="num">Closing</th>
           <th scope="col" class="num sep">Closing shift</th>
-          <th scope="col" class="sep">Years</th>
         </tr>
       </thead>
       <tbody id="body">
@@ -361,17 +360,6 @@ def build_cutoff_page(counselling: str, year: int, ds: dict, html_path: str, jso
     <p>Lower rank indicates higher merit. “Closing shift” is the compared target round closing rank minus the starting round closing rank: a positive number means the seat closed at a higher rank (easier to get) in the later round. Official source: <a href="{esc(cmeta['official_url'])}" target="_blank" rel="noopener noreferrer">{esc(cmeta['official_url'])}</a>.</p>
   </section>
 </main>
-
-<dialog class="cmp-dialog" id="cmp-dialog" aria-labelledby="cmp-title">
-  <div class="cmp-head">
-    <div>
-      <h3 id="cmp-title">Historical Cutoff Comparison</h3>
-      <p id="cmp-sub"></p>
-    </div>
-    <button class="btn sm ghost" id="cmp-close" type="button">Close</button>
-  </div>
-  <div class="cmp-body" id="cmp-body"></div>
-</dialog>
 
 <footer id="site-footer" data-counselling="{counselling}"></footer>
 
